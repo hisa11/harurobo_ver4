@@ -1,5 +1,26 @@
+// language: cpp
 #include "key.hpp"
 #include "mbed.h"
+
+// 変数の定義
+bool Circle = false;
+bool Cross = false;
+bool Square = false;
+bool Triangle = false;
+bool Up = false;
+bool Right = false;
+bool Down = false;
+bool Left = false;
+bool L1 = false;
+bool R1 = false;
+bool L2 = false;
+bool R2 = false;
+bool SHARE = false;
+bool OPTION = false;
+bool PS = false;
+bool L3 = false;
+bool R3 = false;
+
 
 void key_puress(std::string &msg) {
     if (msg == "ci:p")

@@ -1,17 +1,27 @@
-bool Circle = false;
-bool Cross = false;
-bool Square = false;
-bool Triangle = false;
-bool Up = false;
-bool Right = false;
-bool Down = false;
-bool Left = false;
-bool L2 = false;
-bool R2 = false;
-bool L1 = false;
-bool R1 = false;
-bool SHARE = false;
-bool OPTION = false;
-bool PS = false;
-bool L3 = false;
-bool R3 = false;
+// language: cpp
+#ifndef KEY_HPP
+#define KEY_HPP
+
+#include <string>
+
+extern bool Circle;
+extern bool Cross;
+extern bool Square;
+extern bool Triangle;
+extern bool Up;
+extern bool Right;
+extern bool Down;
+extern bool Left;
+extern bool L1;
+extern bool R1;
+extern bool L2;
+extern bool R2;
+extern bool SHARE;
+extern bool OPTION;
+extern bool PS;
+extern bool L3;
+extern bool R3;
+
+void key_puress(std::string &msg);
+
+#endif // KEY_HPP
