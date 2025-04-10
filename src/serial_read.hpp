@@ -3,6 +3,8 @@
 
 #include "mbed.h"
 #include <string>
+#include <sstream>
+#include <vector>
 
 class serial_unit
 {
