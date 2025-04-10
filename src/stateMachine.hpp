@@ -24,6 +24,7 @@ enum class DriveState {
 
 void updateCatapultState(bool R2, bool catapult_limit, int catapult_revolutions);
 void updateCrossButtonState(bool Cross, int servo , int SERVOVO_MODE0, int SERVOVO_MODE1);
+void updateconeState(bool triangle, int &servo, int &suction, int SERVOVO_MODE0, int SERVOVO_MODE1, int suction_power);
 void updateAndHandleInfura(bool Up, bool Down, bool Right, bool Left, int &infura0, int &infura1);
 
 

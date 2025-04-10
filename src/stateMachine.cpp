@@ -67,6 +67,32 @@ void updateCrossButtonState(bool Cross , int servo , int SERVOVO_MODE0 , int SER
     }
 }
 
+void updateconeState(bool triangle, int &servo, int &suction, int SERVOVO_MODE0, int SERVOVO_MODE1, int suction_power) {
+    CrossButtonState current_state = CrossButtonState::IDLE;
+    // 状態遷移判定
+    if (triangle) {
+        current_state = CrossButtonState::PRESSED;
+    } else {
+        current_state = CrossButtonState::IDLE;
+    }
+
+    // 状態に応じた処理
+    switch (current_state) {
+        case CrossButtonState::PRESSED:
+            if (!servovo_flag) {
+                // サーボ角度をトグル
+                servo = (servo == SERVOVO_MODE0) ? SERVOVO_MODE1 : SERVOVO_MODE0;
+                suction = (servo == SERVOVO_MODE1) ? suction_power : 0;
+                servovo_flag = true;  // トグルしたのでフラグを設定
+            }
+            break;
+
+        case CrossButtonState::IDLE:
+            servovo_flag = false;  // ボタンが押されていない場合、フラグをリセット
+            break;
+    }
+}
+
 void updateAndHandleInfura(bool Up, bool Down, bool Right, bool Left, int &infura0, int &infura1) {
     if (Up) {
         infura0 = 5000;

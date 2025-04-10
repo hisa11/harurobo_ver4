@@ -4,6 +4,7 @@
 #include "pid.hpp"
 #include "c610.hpp"
 #include "stateMachine.hpp"
+#include "FP.hpp"
 #include "QEI.h"
 
 #include <algorithm>
@@ -21,6 +22,9 @@
 
 int servo_mode0 = 225;
 int servo_mode1 = 0;
+int cone_mode0 = 0;
+int cone_mode1 = 255;
+
 
 BufferedSerial pc(USBTX, USBRX, 115200);
 BufferedSerial arudino(PB_6, PA_10, 9600);
@@ -35,9 +39,11 @@ CAN can1(PA_11, PA_12, (int)1e6);
 CAN can2(PB_12, PB_13, (int)1e6);
 
 C610 c610(can1);
+FP penguin(35, can2);
 
 int servo[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 int infura[2] = {0, 0};
+int suction = 0;
 
 PID catapult_pid(1.8, 0.0, 1.0);
 double move_pid_Tilt_p = 1.0;
@@ -65,6 +71,7 @@ void key_binding()
 {
     updateCatapultState(R2, catapult_limit, catapult_encoder.getPulses());
     updateCrossButtonState(Cross, servo[0], servo_mode0, servo_mode1);
+    updateconeState(Triangle, servo[1], suction, cone_mode0,cone_mode1, 100);
     updateAndHandleInfura(Up, Down, Right, Left, infura[0], infura[1]);
 }
 
@@ -107,13 +114,17 @@ int main()
 
     catapult_limit.mode(PullUp);
 
+    servo[0] = cone_mode0;
     servo[7] = servo_mode0;
     CANMessage servo_msg(140, reinterpret_cast<uint8_t *>(servo), 8);
     can2.write(servo_msg);
 
     while (1)
     {
+        penguin.pwm[0] = suction;
+        penguin.pwm[1] = suction;
         CANMessage servo_msg(140, reinterpret_cast<uint8_t *>(servo), 8);
         can2.write(servo_msg);
+        penguin.send();
     }
 }
