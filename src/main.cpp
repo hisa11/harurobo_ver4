@@ -19,6 +19,9 @@
 #define ROTATE 0.5
 #define PPR 2048
 
+int servo_mode0 = 225;
+int servo_mode1 = 0;
+
 BufferedSerial pc(USBTX, USBRX, 115200);
 BufferedSerial arudino(PB_6, PA_10, 9600);
 serial_unit serial(pc);
@@ -29,9 +32,11 @@ DigitalIn catapult_limit(D4);
 QEI catapult_encoder(D2, D3, NC, PPR, QEI::X4_ENCODING);
 
 CAN can1(PA_11, PA_12, (int)1e6);
-CAN can2(PA_11, PA_12, (int)1e6);
+CAN can2(PB_12, PB_13, (int)1e6);
 
 C610 c610(can1);
+
+int servo[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 PID catapult_pid(1.8, 0.0, 1.0);
 double move_pid_Tilt_p = 1.0;
@@ -57,6 +62,7 @@ void move(std::string msg)
 void key_binding()
 {
     updateCatapultState(R2, catapult_limit, catapult_encoder.getPulses());
+    updateCrossButtonState(Cross, servo[0], servo_mode0, servo_mode1);
 }
 
 void PID_calculation()
@@ -83,6 +89,7 @@ void PID_calculation()
 
 int main()
 {
+
     Thread thread;
     thread.start(serial_read);
     Thread thread2;
@@ -91,4 +98,15 @@ int main()
     pc.set_blocking(false);
 
     catapult_limit.mode(PullUp);
+
+    servo[7] = servo_mode0;
+    CANMessage servo_msg(140, reinterpret_cast<uint8_t*>(servo), 8);
+    can2.write(servo_msg);
+
+    while (1)
+    {
+        CANMessage servo_msg(140, reinterpret_cast<uint8_t*>(servo), 8);
+        can2.write(servo_msg);
+    }
+    
 }

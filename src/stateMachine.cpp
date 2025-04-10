@@ -7,6 +7,10 @@ enum class CatapultState {
     MOVING_BACKWARD,
     STOPPED
 };
+enum class CrossButtonState {
+    IDLE,            // ボタンが押されていない
+    PRESSED,         // ボタンが押されている
+};
 
 CatapultState current_state = CatapultState::IDLE;
 
@@ -40,6 +44,34 @@ void updateCatapultState(bool R2, bool catapult_limit, int catapult_revolutions)
 
         case CatapultState::IDLE:
             catapult_pid.set_goal(0);
+            break;
+    }
+}
+
+bool servovo_flag = false;
+
+void updateCrossButtonState(bool Cross , int servo , int SERVOVO_MODE0 , int SERVOVO_MODE1) {
+    CrossButtonState current_state = CrossButtonState::IDLE;
+    // 状態遷移判定
+    int servovo = 0;
+    if (Cross) {
+        current_state = CrossButtonState::PRESSED;
+    } else {
+        current_state = CrossButtonState::IDLE;
+    }
+
+    // 状態に応じた処理
+    switch (current_state) {
+        case CrossButtonState::PRESSED:
+            if (!servovo_flag) {
+                // サーボ角度をトグル
+                servovo = (servovo == SERVOVO_MODE0) ? SERVOVO_MODE1 : SERVOVO_MODE0;
+                servovo_flag = true;  // トグルしたのでフラグを設定
+            }
+            break;
+
+        case CrossButtonState::IDLE:
+            servovo_flag = false;  // ボタンが押されていない場合、フラグをリセット
             break;
     }
 }
