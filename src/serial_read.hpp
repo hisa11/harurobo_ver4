@@ -15,6 +15,11 @@ private:
     BufferedSerial &men_serial;
 };
 
+// language: cpp
+extern serial_unit serial;
+void key_binding();
+void serial_read();
+
 inline serial_unit::serial_unit(BufferedSerial &serial) : men_serial(serial) {}
 
 #endif

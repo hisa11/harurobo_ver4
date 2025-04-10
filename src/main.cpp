@@ -14,6 +14,9 @@ BufferedSerial pc(USBTX, USBRX, 115200);
 BufferedSerial arudino(PB_6, PA_10, 9600);
 serial_unit serial(pc);
 
+CAN can1(PA_11, PA_12, (int)1e6);
+CAN can2(PA_11, PA_12, (int)1e6);
+
 
 std::vector<double> to_numbers(const std::string &input) {
     std::vector<double> numbers;
@@ -30,18 +33,6 @@ std::vector<double> to_numbers(const std::string &input) {
 }
 void key_binding() {
 
-}
-
-void serial_read() {
-    while (1) {
-
-        std::string msg = serial.read_serial();
-        if (msg != "") {
-                key_puress(msg);
-            }
-        key_binding();
-        // ThisThread::sleep_for(10ms);
-    }
 }
 
 int main(){
