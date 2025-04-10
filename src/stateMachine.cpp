@@ -1,16 +1,7 @@
 #include "stateMachine.hpp"
 #include "mbed.h"
 
-enum class CatapultState {
-    IDLE,
-    MOVING_FORWARD,
-    MOVING_BACKWARD,
-    STOPPED
-};
-enum class CrossButtonState {
-    IDLE,            // ボタンが押されていない
-    PRESSED,         // ボタンが押されている
-};
+
 
 CatapultState current_state = CatapultState::IDLE;
 
@@ -73,5 +64,24 @@ void updateCrossButtonState(bool Cross , int servo , int SERVOVO_MODE0 , int SER
         case CrossButtonState::IDLE:
             servovo_flag = false;  // ボタンが押されていない場合、フラグをリセット
             break;
+    }
+}
+
+void updateAndHandleInfura(bool Up, bool Down, bool Right, bool Left, int &infura0, int &infura1) {
+    if (Up) {
+        infura0 = 5000;
+        infura1 = 5000;
+    } else if (Down) {
+        infura0 = -5000;
+        infura1 = -5000;
+    } else if (Right) {
+        infura0 = 2500;
+        infura1 = -2500;
+    } else if (Left) {
+        infura0 = -2500;
+        infura1 = 2500;
+    } else {
+        infura0 = 0;
+        infura1 = 0;
     }
 }

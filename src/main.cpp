@@ -37,6 +37,7 @@ CAN can2(PB_12, PB_13, (int)1e6);
 C610 c610(can1);
 
 int servo[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+int infura[2] = {0, 0};
 
 PID catapult_pid(1.8, 0.0, 1.0);
 double move_pid_Tilt_p = 1.0;
@@ -63,6 +64,7 @@ void key_binding()
 {
     updateCatapultState(R2, catapult_limit, catapult_encoder.getPulses());
     updateCrossButtonState(Cross, servo[0], servo_mode0, servo_mode1);
+    updateAndHandleInfura(Up, Down, Right, Left, infura[0], infura[1]);
 }
 
 void PID_calculation()
@@ -89,7 +91,6 @@ void PID_calculation()
 
 int main()
 {
-
     Thread thread;
     thread.start(serial_read);
     Thread thread2;
@@ -102,13 +103,12 @@ int main()
     catapult_limit.mode(PullUp);
 
     servo[7] = servo_mode0;
-    CANMessage servo_msg(140, reinterpret_cast<uint8_t*>(servo), 8);
+    CANMessage servo_msg(140, reinterpret_cast<uint8_t *>(servo), 8);
     can2.write(servo_msg);
 
     while (1)
     {
-        CANMessage servo_msg(140, reinterpret_cast<uint8_t*>(servo), 8);
+        CANMessage servo_msg(140, reinterpret_cast<uint8_t *>(servo), 8);
         can2.write(servo_msg);
     }
-    
 }
