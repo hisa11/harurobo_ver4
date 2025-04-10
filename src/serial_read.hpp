@@ -20,6 +20,7 @@ extern serial_unit serial;
 void key_binding();
 void serial_read();
 
+std::vector<double> to_numbers(const std::string &input);
 inline serial_unit::serial_unit(BufferedSerial &serial) : men_serial(serial) {}
 
 #endif

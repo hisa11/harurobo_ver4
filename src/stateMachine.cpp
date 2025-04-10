@@ -10,7 +10,6 @@ enum class CatapultState {
 };
 
 CatapultState current_state = CatapultState::IDLE;
-int speed = 0;
 
 void updateCatapultState(bool R2, bool catapult_limit, int catapult_revolutions) {
     // 状態遷移判定
@@ -29,19 +28,19 @@ void updateCatapultState(bool R2, bool catapult_limit, int catapult_revolutions)
     // 状態に応じた処理
     switch (current_state) {
         case CatapultState::MOVING_FORWARD:
-            catapult_pid.set_goal(0);
+            catapult_pid.set_goal(8000);
             break;
 
         case CatapultState::MOVING_BACKWARD:
-            speed = -4000;
+            catapult_pid.set_goal(-4000);
             break;
 
         case CatapultState::STOPPED:
-            speed = 0;
+        catapult_pid.set_goal(0);
             break;
 
         case CatapultState::IDLE:
-            speed = 0;
+            catapult_pid.set_goal(0);
             break;
     }
 }
