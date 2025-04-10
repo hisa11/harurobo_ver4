@@ -19,11 +19,13 @@
 #define DEPTH 200
 #define ROTATE 0.5
 #define PPR 2048
+#define SERVO_canID 140
 
 int servo_mode0 = 225;
 int servo_mode1 = 0;
 int cone_mode0 = 0;
 int cone_mode1 = 255;
+int suction_power = 3000;
 
 
 BufferedSerial pc(USBTX, USBRX, 115200);
@@ -71,7 +73,7 @@ void key_binding()
 {
     updateCatapultState(R2, catapult_limit, catapult_encoder.getPulses());
     updateCrossButtonState(Cross, servo[0], servo_mode0, servo_mode1);
-    updateconeState(Triangle, servo[1], suction, cone_mode0,cone_mode1, 100);
+    updateconeState(Triangle, servo[1], suction, cone_mode0,cone_mode1, suction_power);
     updateAndHandleInfura(Up, Down, Right, Left, infura[0], infura[1]);
 }
 
@@ -116,14 +118,14 @@ int main()
 
     servo[0] = cone_mode0;
     servo[7] = servo_mode0;
-    CANMessage servo_msg(140, reinterpret_cast<uint8_t *>(servo), 8);
+    CANMessage servo_msg(SERVO_canID, reinterpret_cast<uint8_t *>(servo), 8);
     can2.write(servo_msg);
 
     while (1)
     {
         penguin.pwm[0] = suction;
         penguin.pwm[1] = suction;
-        CANMessage servo_msg(140, reinterpret_cast<uint8_t *>(servo), 8);
+        CANMessage servo_msg(SERVO_canID, reinterpret_cast<uint8_t *>(servo), 8);
         can2.write(servo_msg);
         penguin.send();
     }
