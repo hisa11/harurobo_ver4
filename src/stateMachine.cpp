@@ -1,6 +1,5 @@
 #include "stateMachine.hpp"
 #include "mbed.h"
-#include "pid.hpp"
 
 enum class CatapultState {
     IDLE,
