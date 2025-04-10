@@ -1,3 +1,7 @@
+#include "stateMachine.hpp"
+#include "mbed.h"
+#include "pid.hpp"
+
 enum class CatapultState {
     IDLE,
     MOVING_FORWARD,
@@ -25,7 +29,7 @@ void updateCatapultState(bool R2, bool catapult_limit, int catapult_revolutions)
     // 状態に応じた処理
     switch (current_state) {
         case CatapultState::MOVING_FORWARD:
-            speed = 8000;   
+            catapult_pid.set_goal(0);
             break;
 
         case CatapultState::MOVING_BACKWARD:

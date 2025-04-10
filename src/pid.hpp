@@ -1,17 +1,18 @@
 #ifndef PID_HPP
 #define PID_HPP
 
+
 class PID
 {
-public:
+    public:
     PID(double kp, double ki, double kd);
-
+    
     double do_pid(double actual);
     void set_goal(double goal);
     void set_dt(double time);
     double get_goal();
-
-private:
+    
+    private:
     const double kp;
     const double ki;
     const double kd;
@@ -30,5 +31,7 @@ inline PID::PID(double kp, double ki, double kd) : kp(kp), ki(ki), kd(kd)
     pre_output = 0.0;
     output = 0.0;
 }
+
+extern PID catapult_pid; 
 
 #endif

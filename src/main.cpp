@@ -1,7 +1,7 @@
 #include "mbed.h"
 #include "key.hpp"
 #include "serial_read.hpp"
-#include "PID.hpp"
+#include "pid.hpp"
 
 #include <algorithm>
 #include <array>
@@ -18,7 +18,7 @@ serial_unit serial(pc);
 CAN can1(PA_11, PA_12, (int)1e6);
 CAN can2(PA_11, PA_12, (int)1e6);
 
-PID catapult_pid(0.1, 0.01, 0.1, 0.01);
+PID catapult_pid(1.8, 0.0, 1.0);
 
 void key_binding() {
     
