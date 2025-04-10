@@ -94,6 +94,8 @@ int main()
     thread.start(serial_read);
     Thread thread2;
     thread2.start(PID_calculation);
+    Thread thread3;
+    thread3.start(key_binding);
     pc.set_baud(115200);
     pc.set_blocking(false);
 
