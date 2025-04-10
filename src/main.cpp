@@ -93,12 +93,14 @@ void PID_calculation()
             move_pid[i].set_dt(dt);
         for (int i = 0; i < 2; i++)
             infura_pid[i].set_dt(dt);
+        catapult_pid.set_dt(dt);
         c610.set_power(1, move_pid[0].do_pid(c610.get_rpm(1)));
         c610.set_power(2, move_pid[1].do_pid(c610.get_rpm(2)));
         c610.set_power(3, move_pid[2].do_pid(c610.get_rpm(3)));
         c610.set_power(4, move_pid[3].do_pid(c610.get_rpm(4)));
-        c610.set_power(5, infura_pid[0].do_pid(infura[0]));
-        c610.set_power(6, infura_pid[1].do_pid(infura[1]));
+        c610.set_power(5, infura_pid[0].do_pid(c610 .get_rpm(5)));
+        c610.set_power(6, infura_pid[1].do_pid(c610 .get_rpm(6)));
+        c610.set_power(7, catapult_pid.do_pid(c610.get_rpm(7)));
         pre_time = now_time;
     }
 }
@@ -126,6 +128,7 @@ int main()
         penguin.pwm[0] = suction;
         penguin.pwm[1] = suction;
         CANMessage servo_msg(SERVO_canID, reinterpret_cast<uint8_t *>(servo), 8);
+        c610.send_message();
         can2.write(servo_msg);
         penguin.send();
     }
