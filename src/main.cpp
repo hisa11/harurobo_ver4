@@ -1,6 +1,7 @@
 #include "mbed.h"
 #include "key.hpp"
 #include "serial_read.hpp"
+#include "PID.hpp"
 
 #include <algorithm>
 #include <array>
@@ -17,22 +18,10 @@ serial_unit serial(pc);
 CAN can1(PA_11, PA_12, (int)1e6);
 CAN can2(PA_11, PA_12, (int)1e6);
 
+PID catapult_pid(0.1, 0.01, 0.1, 0.01);
 
-std::vector<double> to_numbers(const std::string &input) {
-    std::vector<double> numbers;
-    std::stringstream ss(input);
-    std::string token;
-
-    while (std::getline(ss, token, ':')) { // ':'で区切る
-        if (token.back() == '|') {         // 最後の '|' を削除
-            token.pop_back();
-        }
-        numbers.push_back(std::stod(token)); // 文字列をdoubleに変換
-    }
-    return numbers;
-}
 void key_binding() {
-
+    
 }
 
 int main(){
