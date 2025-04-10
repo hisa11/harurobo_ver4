@@ -45,6 +45,7 @@ PID move_pid[4] = {PID(1.2 * move_pid_Tilt_p, 0.005, 1.0),
                    PID(1.3 * move_pid_Tilt_p, 0.005, 1.0),
                    PID(1.65 * move_pid_Tilt_p, 0.005, 1.0),
                    PID(0.8 * move_pid_Tilt_p, 0.005, 1.0)};
+PID infura_pid[2] = {PID(1.0, 0.0, 0.0), PID(1.0, 0.0, 0.0)};
 
 void move(std::string msg)
 {
@@ -81,10 +82,14 @@ void PID_calculation()
                     1000000.0;
         for (int i = 0; i < 4; i++)
             move_pid[i].set_dt(dt);
+        for (int i = 0; i < 2; i++)
+            infura_pid[i].set_dt(dt);
         c610.set_power(1, move_pid[0].do_pid(c610.get_rpm(1)));
         c610.set_power(2, move_pid[1].do_pid(c610.get_rpm(2)));
         c610.set_power(3, move_pid[2].do_pid(c610.get_rpm(3)));
         c610.set_power(4, move_pid[3].do_pid(c610.get_rpm(4)));
+        c610.set_power(5, infura_pid[0].do_pid(infura[0]));
+        c610.set_power(6, infura_pid[1].do_pid(infura[1]));
         pre_time = now_time;
     }
 }
