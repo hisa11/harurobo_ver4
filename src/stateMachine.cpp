@@ -99,21 +99,6 @@ void koudaihou(bool square, int &Kodaiho, int KODAI_MODE0, int KODAI_MODE1)
     {
         kodai_flag = false; // ボタンが押されていない場合、フラグをリセット
     }
-    switch (current_state)
-    {
-    case SquareButtonState::PRESSED:
-        if (!kodai_flag)
-        {
-            // サーボ角度をトグル
-            Kodaiho = (Kodaiho == KODAI_MODE0) ? KODAI_MODE1 : KODAI_MODE0;
-            servovo_flag = true; // トグルしたのでフラグを設定
-        }
-        break;
-
-    case SquareButtonState::IDLE:
-        servovo_flag = false; // ボタンが押されていない場合、フラグをリセット
-        break;
-    }
 }
 
 void updateconeState(bool &triangle, int cone_speed, bool cone_limit)

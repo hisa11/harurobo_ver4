@@ -96,6 +96,7 @@ void PID_calculation()
         for (int i = 0; i < 2; i++)
             infura_pid[i].set_dt(dt);
         catapult_pid.set_dt(dt);
+        cone_pid.set_dt(dt);
         // c610.set_power(1, move_pid[0].do_pid(c610.get_rpm(1)));
         // c610.set_power(2, move_pid[1].do_pid(c610.get_rpm(2)));
         // c610.set_power(3, move_pid[2].do_pid(c610.get_rpm(3)));
@@ -103,6 +104,7 @@ void PID_calculation()
         c610.set_power(5, infura_pid[0].do_pid(c610 .get_rpm(5)));
         c610.set_power(6, infura_pid[1].do_pid(c610 .get_rpm(6)));
         c610.set_power(7, catapult_pid.do_pid(c610.get_rpm(7)));
+        c610.set_power(8, cone_pid.do_pid(c610.get_rpm(8)));
         pre_time = now_time;
     }
 }
