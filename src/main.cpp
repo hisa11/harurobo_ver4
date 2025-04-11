@@ -29,7 +29,7 @@ int suction_power = 3000;
 
 
 BufferedSerial pc(USBTX, USBRX, 115200);
-BufferedSerial arudino(PB_6, PA_10, 9600);
+BufferedSerial nucleo(PA_0, PA_1, 115200);
 serial_unit serial(pc);
 
 DigitalIn catapult_limit(D4);
@@ -49,10 +49,6 @@ int suction = 0;
 
 PID catapult_pid(1.8, 0.0, 1.0);
 double move_pid_Tilt_p = 1.0;
-PID move_pid[4] = {PID(1.2 * move_pid_Tilt_p, 0.005, 1.0),
-                   PID(1.3 * move_pid_Tilt_p, 0.005, 1.0),
-                   PID(1.65 * move_pid_Tilt_p, 0.005, 1.0),
-                   PID(0.8 * move_pid_Tilt_p, 0.005, 1.0)};
 PID infura_pid[2] = {PID(1.0, 0.0, 0.0), PID(1.0, 0.0, 0.0)};
 
 void move(std::string msg)
@@ -63,10 +59,9 @@ void move(std::string msg)
                           (-joys[0] - joys[1] + (WIDTH + DEPTH)) * ROTATE,
                           -(joys[0] - joys[1] - (WIDTH + DEPTH)) * ROTATE,
                           (joys[0] + joys[1] + (WIDTH + DEPTH)) * ROTATE};
-    for (size_t i = 0; i < joys.size(); i++)
-    {
-        move_pid[i].set_goal(move_val[i]);
-    }
+    char buf[100];
+    snprintf(buf, sizeof(buf), "%f,%f,%f,%f\n", move_val[0], move_val[1], move_val[2], move_val[3]);
+    nucleo.write(buf, strlen(buf));
 }
 
 void key_binding()
@@ -89,15 +84,15 @@ void PID_calculation()
                         now_time - pre_time)
                         .count() /
                     1000000.0;
-        for (int i = 0; i < 4; i++)
-            move_pid[i].set_dt(dt);
+        // for (int i = 0; i < 4; i++)
+        //     move_pid[i].set_dt(dt);
         for (int i = 0; i < 2; i++)
             infura_pid[i].set_dt(dt);
         catapult_pid.set_dt(dt);
-        c610.set_power(1, move_pid[0].do_pid(c610.get_rpm(1)));
-        c610.set_power(2, move_pid[1].do_pid(c610.get_rpm(2)));
-        c610.set_power(3, move_pid[2].do_pid(c610.get_rpm(3)));
-        c610.set_power(4, move_pid[3].do_pid(c610.get_rpm(4)));
+        // c610.set_power(1, move_pid[0].do_pid(c610.get_rpm(1)));
+        // c610.set_power(2, move_pid[1].do_pid(c610.get_rpm(2)));
+        // c610.set_power(3, move_pid[2].do_pid(c610.get_rpm(3)));
+        // c610.set_power(4, move_pid[3].do_pid(c610.get_rpm(4)));
         c610.set_power(5, infura_pid[0].do_pid(c610 .get_rpm(5)));
         c610.set_power(6, infura_pid[1].do_pid(c610 .get_rpm(6)));
         c610.set_power(7, catapult_pid.do_pid(c610.get_rpm(7)));
@@ -113,7 +108,6 @@ int main()
     thread2.start(PID_calculation);
     Thread thread3;
     thread3.start(key_binding);
-    pc.set_baud(115200);
     pc.set_blocking(false);
 
     catapult_limit.mode(PullUp);
