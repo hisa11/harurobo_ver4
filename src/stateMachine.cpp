@@ -40,6 +40,7 @@ void updateCatapultState(bool R2, bool catapult_limit, int catapult_revolutions)
 }
 
 bool servovo_flag = false;
+bool kodai_flag = false;
 
 void updateCrossButtonState(bool Cross , int servo , int SERVOVO_MODE0 , int SERVOVO_MODE1) {
     CrossButtonState current_state = CrossButtonState::IDLE;
@@ -66,6 +67,32 @@ void updateCrossButtonState(bool Cross , int servo , int SERVOVO_MODE0 , int SER
             break;
     }
 }
+
+void koudaihou(bool square, int &Kodaiho, int KODAI_MODE0, int KODAI_MODE1) {
+    SquareButtonState current_state = SquareButtonState::IDLE;
+    if (square) {
+        if (!kodai_flag) {
+            Kodaiho = (Kodaiho == KODAI_MODE0) ? KODAI_MODE1 : KODAI_MODE0;
+            kodai_flag = true;  // トグルしたのでフラグを設定
+        }
+    } else {
+        kodai_flag = false;  // ボタンが押されていない場合、フラグをリセット
+    }
+    switch (current_state) {
+        case SquareButtonState::PRESSED:
+            if (!kodai_flag) {
+                // サーボ角度をトグル
+                Kodaiho = (Kodaiho == KODAI_MODE0) ? KODAI_MODE1 : KODAI_MODE0;
+                servovo_flag = true;  // トグルしたのでフラグを設定
+            }
+            break;
+
+        case SquareButtonState::IDLE:
+            servovo_flag = false;  // ボタンが押されていない場合、フラグをリセット
+            break;
+    }
+}
+
 
 void updateconeState(bool triangle, int &servo, int &suction, int SERVOVO_MODE0, int SERVOVO_MODE1, int suction_power) {
     CrossButtonState current_state = CrossButtonState::IDLE;

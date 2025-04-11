@@ -25,7 +25,10 @@ int servo_mode0 = 225;
 int servo_mode1 = 0;
 int cone_mode0 = 0;
 int cone_mode1 = 255;
+int kodaihou_mode0 = 65;
+int kodaihou_mode1 = 45;
 int suction_power = 3000;
+
 
 
 BufferedSerial pc(USBTX, USBRX, 115200);
@@ -70,6 +73,7 @@ void key_binding()
     updateCrossButtonState(Cross, servo[0], servo_mode0, servo_mode1);
     updateconeState(Triangle, servo[1], suction, cone_mode0,cone_mode1, suction_power);
     updateAndHandleInfura(Up, Down, Right, Left, infura[0], infura[1]);
+    koudaihou(Square, servo[1], kodaihou_mode0, kodaihou_mode1);
 }
 
 void PID_calculation()
@@ -113,6 +117,7 @@ int main()
     catapult_limit.mode(PullUp);
 
     servo[0] = cone_mode0;
+    servo[1] = kodaihou_mode0;
     servo[7] = servo_mode0;
     CANMessage servo_msg(SERVO_canID, reinterpret_cast<uint8_t *>(servo), 8);
     can2.write(servo_msg);
