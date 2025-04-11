@@ -33,5 +33,6 @@ inline PID::PID(double kp, double ki, double kd) : kp(kp), ki(ki), kd(kd)
 }
 
 extern PID catapult_pid; 
+extern PID cone_pid;
 
 #endif

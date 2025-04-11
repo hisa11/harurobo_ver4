@@ -28,6 +28,7 @@ int cone_mode1 = 255;
 int kodaihou_mode0 = 65;
 int kodaihou_mode1 = 45;
 int suction_power = 3000;
+int cone_speed = 1000;
 
 
 
@@ -36,6 +37,7 @@ BufferedSerial nucleo(PA_0, PA_1, 115200);
 serial_unit serial(pc);
 
 DigitalIn catapult_limit(D4);
+DigitalIn cone_limit(D5);
 
 // c610.hpp 内で定義されているクラス名を仮に C610 とした場合のインスタンス宣言
 QEI catapult_encoder(D2, D3, NC, PPR, QEI::X4_ENCODING);
@@ -53,6 +55,7 @@ int suction = 0;
 PID catapult_pid(1.8, 0.0, 1.0);
 double move_pid_Tilt_p = 1.0;
 PID infura_pid[2] = {PID(1.0, 0.0, 0.0), PID(1.0, 0.0, 0.0)};
+PID cone_pid(1.0, 0.0, 0.0);
 
 void move(std::string msg)
 {

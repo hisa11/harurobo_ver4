@@ -24,6 +24,12 @@ enum class DriveState {
     RIGHT,
     LEFT
 };
+enum class Cone_Arm_state {
+    IDLE,
+    right,
+    left
+};
+
 
 
 void updateCatapultState(bool R2, bool catapult_limit, int catapult_revolutions);
