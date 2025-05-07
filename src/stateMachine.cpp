@@ -30,19 +30,19 @@ void updateCatapultState(bool R2, bool catapult_limit, int catapult_revolutions)
     switch (current_state)
     {
     case CatapultState::MOVING_FORWARD:
-        catapult_pid.set_goal(8000);
+        // catapult_pid.set_goal(8000);
         break;
 
     case CatapultState::MOVING_BACKWARD:
-        catapult_pid.set_goal(-4000);
+        // catapult_pid.set_goal(-4000);
         break;
 
     case CatapultState::STOPPED:
-        catapult_pid.set_goal(0);
+        // catapult_pid.set_goal(0);
         break;
 
     case CatapultState::IDLE:
-        catapult_pid.set_goal(0);
+        // catapult_pid.set_goal(0);
         break;
     }
 }
@@ -130,13 +130,13 @@ void updateconeState(bool &triangle, int cone_speed, bool cone_limit)
     switch (current_state)
     {
     case Cone_Arm_state::right:
-        cone_pid.set_goal(cone_speed);
+        // cone_pid.set_goal(cone_speed);
         break;
     case Cone_Arm_state::left:
-        cone_pid.set_goal(-cone_speed);
+        // cone_pid.set_goal(-cone_speed);
         break;
     case Cone_Arm_state::IDLE:
-        cone_pid.set_goal(0);
+        // cone_pid.set_goal(0);
         break;
     default:
         break;

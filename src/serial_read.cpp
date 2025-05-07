@@ -62,7 +62,7 @@ void serial_read() {
                     msg = "n:0.000000:-0.500000:0.000000:0.000000|";
                     printf("Updated msg: %s\n", msg.c_str()); // 増加した値を表示
                 }
-                move(msg);
+                move_aa(msg);
             } else {
                 key_puress(msg);
             }
